@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CS_DB_Sample.Infrastructures.Entities;
+namespace CS_DB_Exercise.CS_DB_Sample.Infrastructures.Entities;
 
 [Table("sales")]
 public class SalesEntity

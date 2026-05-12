@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Infrastructures.Entities;
+namespace CS_DB_Exercise.Infrastructures.Entities;
 
 [Table("employee")]
 public class EmployeeEntity

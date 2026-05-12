@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-namespace CS_DB_Sample.Infrastructures.Entities;
+namespace CS_DB_Exercise.CS_DB_Sample.Infrastructures.Entities;
 
 [Table("item")]
 public class ItemEntity

@@ -1,7 +1,7 @@
-using CS_DB_Sample.Infrastructures.Entities;
+using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-namespace CS_DB_Sample.Infrastructures;
+namespace CS_DB_Exercise.CS_DB_Sample.Infrastructures.Contexts;
 
 public class AppDbContext : DbContext
 {
