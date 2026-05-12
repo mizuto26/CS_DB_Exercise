@@ -7,22 +7,21 @@ class Program
 {
     static void Main(string[] args)
     {
-        var accessor = new DepartmentAccessor(new AppDbContext());
+        var accessor = new EmployeeAccessor(new AppDbContext());
 
-        var departments = accessor.FindAll();
-        Console.WriteLine("すべての部署を取得する");
-        foreach (var d in departments)
+        Console.WriteLine("部署Idを入力してください->");
+        int dept_id = int.Parse(Console.ReadLine()!);
+
+        Console.WriteLine("演習-07 employeeテーブルから部署Idで該当社員を取得する");
+
+        var employee = accessor.FindByDeptId(dept_id);
+        if (employee == null)
         {
-            Console.WriteLine(d);
+            Console.WriteLine($"部署Id:{dept_id}の部署に所属する社員は存在しません");
         }
-
-        var department = accessor.FindById(1);
-        Console.WriteLine($"存在する部署Id:{department!.ToString()}");
-
-        department = accessor.FindById(101);
-        if (department == null)
+        else
         {
-            Console.WriteLine($"部署Id:101の部署は存在しません。");
+            Console.WriteLine($"{employee!.ToString()}");
         }
     }
 }

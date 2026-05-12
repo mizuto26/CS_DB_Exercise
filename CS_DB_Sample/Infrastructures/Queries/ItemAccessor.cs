@@ -10,8 +10,9 @@ public class ItemAccessor(AppDbContext context)
     public List<ItemEntity> FindByPrice(int price)
     {
         var items = _context.Items
-            .Where(i => i.Price == price)
-            .ToList();
+            .Where(itemEntity =>
+                (itemEntity.Price == price))
+            .ToList();//条件一致するすべてのレコード
 
         return items;
     }
@@ -19,47 +20,54 @@ public class ItemAccessor(AppDbContext context)
     public ItemEntity FindByNameTypeA(string name)
     {
         var item = _context.Items
-            .Where(i => i.Name == name)
-            .Select(i => new ItemEntity
-            {
-                Name = i.Name,
-                Price = i.Price
-            })
-            .Single();
+            .Where(itemEntity =>
+                (itemEntity.Name == name))
+            .Select(itemEntity =>
+                new ItemEntity
+                {
+                    Name = itemEntity.Name,
+                    Price = itemEntity.Price
+                })
+            .Single();//レコードが1件だけか
         return item;
     }
 
     public ItemEntity FindByNameTypeB(string name)
     {
         var item = _context.Items
-            .Select(i => new ItemEntity
-            {
-                Name = i.Name,
-                Price = i.Price
-            })
-            .Single(i => i.Name == name);
+            .Select(itemEntity =>
+                new ItemEntity
+                {
+                    Name = itemEntity.Name,
+                    Price = itemEntity.Price
+                })
+            .Single(itemEntity =>
+                (itemEntity.Name == name));
         return item;
     }
 
     public List<ItemEntity> FindByNameContains(string keyword)
     {
-        return [.. _context.Items.Where(i => i.Name!.Contains(keyword))];
+        return [.. _context.Items
+            .Where(itemEntity => itemEntity.Name!.Contains(keyword))];
     }
 
     public List<ItemEntity> FindByNameStartsWith(string prefix)
     {
-        return [.. _context.Items.Where(i => i.Name!.StartsWith(prefix))];
+        return [.. _context.Items
+            .Where(itemEntity => itemEntity.Name!.StartsWith(prefix))];
     }
 
     public List<ItemEntity> FindByNameEndsWith(string suffix)
     {
-        return [.. _context.Items.Where(i => i.Name!.EndsWith(suffix))];
+        return [.. _context.Items
+            .Where(itemEntity => itemEntity.Name!.EndsWith(suffix))];
     }
 
     public List<ItemEntity> FindByPriceNoTracking(int price)
     {
         var items = _context.Items
-            .Where(i => i.Price == price)
+            .Where(itemEntity => (itemEntity.Price == price))
             .AsNoTracking()
             .ToList();
         return items;

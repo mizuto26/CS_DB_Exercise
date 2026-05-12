@@ -7,10 +7,10 @@ public class AppDbContext : DbContext
 {
     public DbSet<ItemEntity> Items { get; set; } = null!;
     public DbSet<ItemCategoryEntity> ItemCategories { get; set; } = null!;
-    public DbSet<ItemStockEntity> ItemStocks { get; set; } = null!;
-    public DbSet<SalesEntity> Sales { get; set; } = null!;
-    public DbSet<SalesDetailEntity> SalesDetails { get; set; } = null!;
     public DbSet<DepartmentEntity> Departments { get; set; } = null!;
+    // public DbSet<ItemStockEntity> ItemStocks { get; set; } = null!;
+    // public DbSet<SalesEntity> Sales { get; set; } = null!;
+    // public DbSet<SalesDetailEntity> SalesDetails { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -30,9 +30,9 @@ public class AppDbContext : DbContext
             .HasForeignKey(itemEntity => itemEntity.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<SalesDetailEntity>()
-            .HasOne(salesDetailEntity => salesDetailEntity.Item)
-            .WithMany()
-            .HasForeignKey(salesDetailEntity => salesDetailEntity.ItemId);
+        // modelBuilder.Entity<SalesDetailEntity>()
+        //     .HasOne(salesDetailEntity => salesDetailEntity.Item)
+        //     .WithMany()
+        //     .HasForeignKey(salesDetailEntity => salesDetailEntity.ItemId);
     }
 }

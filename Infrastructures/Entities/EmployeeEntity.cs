@@ -18,6 +18,6 @@ public class EmployeeEntity
 
     public override string ToString()
     {
-        return $"id = {Id}, name = {Name}, dept_id = {DeptId}";
+        return $"社員id={Id} , 社員名={Name} , 部署Id={DeptId}";
     }
 }

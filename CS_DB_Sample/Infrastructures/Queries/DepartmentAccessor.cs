@@ -1,7 +1,7 @@
-using CS_DB_Exercise.Infrastructures.Contexts;
-using CS_DB_Exercise.Infrastructures.Entities;
+using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Entities;
+using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Contexts;
 
-namespace CS_DB_Exercise.Infrastructures.Queries;
+namespace CS_DB_Exercise.CS_DB_Sample.Infrastructures.Queries;
 
 public class DepartmentAccessor(AppDbContext context)
 {
