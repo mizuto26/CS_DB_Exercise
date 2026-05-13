@@ -14,6 +14,7 @@ public class EmployeeEntity
     [Column("dept_id")]
     public int DeptId { get; set; }
 
+    [ForeignKey("DeptId")]
     public DepartmentEntity? Department { get; set; }
 
     public override string ToString()

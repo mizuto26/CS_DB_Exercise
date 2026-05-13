@@ -15,6 +15,6 @@ public class DepartmentEntity
 
     public override string ToString()
     {
-        return $"id = {Id}, name = {Name}";
+        return $"部署Id = {Id}, 部署名 = {Name}";
     }
 }

@@ -9,22 +9,26 @@ class Program
     static void Main(string[] args)
     {
         var context = new AppDbContext();
-        var employeeAccessor = new EmployeeAccessor(context);
+        var departmentAccessor = new DepartmentAccessor(context);
 
-        Console.WriteLine("社員Idを入力してください->");
-        int employee_id = int.Parse(Console.ReadLine()!);
+        Console.WriteLine("部署Idを入力してください->");
+        int id = int.Parse(Console.ReadLine()!);
 
-        Console.WriteLine("演習-11 指定された社員Idの社員を削除する");
+        Console.WriteLine("演習-14 指定された部署Idの部署と所属社員を取得する");
 
-        var result = employeeAccessor.DeleteById(id: employee_id);
+        var result = departmentAccessor.FindByIdJoinEmployee(id: id);
 
         if (result == null)
         {
-            Console.WriteLine($"社員Id:{employee_id}の社員は存在しないため削除できませんでした");
+            Console.WriteLine($"部署Id:{id}の部署は存在しませんでした");
         }
         else
         {
-            Console.WriteLine($"社員Id:{employee_id}の社員を削除しました");
+            Console.WriteLine(result.ToString());
+            foreach (var employee in result.Employees!)
+            {
+                Console.WriteLine(employee.ToString());
+            }
         }
     }
 }

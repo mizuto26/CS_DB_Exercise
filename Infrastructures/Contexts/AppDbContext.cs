@@ -6,7 +6,7 @@ namespace CS_DB_Exercise.Infrastructures.Contexts;
 public class AppDbContext : DbContext
 {
     public DbSet<DepartmentEntity> Departments { get; set; } = null!;
-    public DbSet<EmployeeEntity> Employee { get; set; } = null!;
+    public DbSet<EmployeeEntity> Employees { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
