@@ -1,15 +1,20 @@
+using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Adapters;
+using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Contexts;
+using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Repositories;
+
 namespace CS_DB_Exercise.CS_DB_Sample;
 
-class Program
+internal static class Program
 {
-    static void Main(string[] args)
+    private static void Main()
     {
         using var context = new AppDbContext();
-        var accessor = new ItemAccessor(context);
+        var adapter = new ItemEntityAdapter();
+        var itemRepository = new ItemRepository(adapter, context);
 
-        var average = accessor.GetAveragePriceByCategoryId(categoryId: 1);
-        Console.WriteLine($"平均単価: {average}");
-        var sum = accessor.GetTotalPriceByCategoryId(categoryId: 1);
-        Console.WriteLine($"合計単価: {sum}");
+        var item = itemRepository.FindById(2);
+        Console.WriteLine(item);
+        var result = itemRepository.Exists("防水スプレー");
+        Console.WriteLine($"データの有無:{result}");
     }
 }
