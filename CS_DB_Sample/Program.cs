@@ -1,35 +1,20 @@
-using CS_DB_Exercise.CS_DB_Sample.Infrastructures;
-using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Queries;
-using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Contexts;
 namespace CS_DB_Exercise.CS_DB_Sample;
 
 class Program
 {
     static void Main(string[] args)
     {
-        var context = new AppDbContext();
-        var itemAccessor = new ItemAccessor(context);
-        var itemCategoryAccessor = new ItemCategoryAccessor(context);
-        var salesDetailAccessor = new SalesDetailAccessor(context);
+        using var context = new AppDbContext();
+        var registerSales = new RegiterSales(context);
 
-        var item = itemAccessor.FindByIdJoinItemCategory(id: 1);
-        Console.WriteLine(item);
-        Console.WriteLine(item.Category);
+        var sale = new SalesEntity { SalesDate = DateTime.UtcNow, Total = 240, AccountId = 1 };
 
-        var itemCategory = itemCategoryAccessor.FindByIdJoinItems(id: 1);
-        Console.WriteLine(itemCategory);
-        foreach (var item in itemCategory.Items!)
+        var salesDetails = new List<SalesDetailEntity>
         {
-            Console.WriteLine(item);
-        }
+            new SalesDetailEntity { Quantity = 1, Subtotal = 120, ItemId = 1 },
+            new SalesDetailEntity { Quantity = 1, Subtotal = 120, ItemId = 2 }
+        };
 
-        var salesDetails = salesDetailAccessor.FindBySalesIdJoinItemAndItemCategory(1);
-        foreach (var salesDetail in salesDetails)
-        {
-            Console.WriteLine(salesDetail);
-            Console.WriteLine(salesDetail.Item);
-            Console.WriteLine(salesDetail.Item!.Category);
-
-        }
+        registerSales.Register(sale, salesDetails);
     }
 }

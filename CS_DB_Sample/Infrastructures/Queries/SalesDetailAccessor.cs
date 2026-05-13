@@ -16,4 +16,11 @@ public class SalesDetailAccessor(AppDbContext context)
             .ToList();
         return salesDetails;
     }
+
+    public SalesDetailEntity Create(SalesDetailEntity salesDetail)
+    {
+        var result = _context.SalesDetails.Add(salesDetail);
+        _context.SaveChanges();
+        return result.Entity;
+    }
 }

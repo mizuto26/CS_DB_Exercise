@@ -26,4 +26,11 @@ public class DepartmentAccessor(AppDbContext context)
             .FirstOrDefault();
         return department;
     }
+
+    public DepartmentEntity Create(DepartmentEntity department)
+    {
+        var result = _context.Departments.Add(department);
+        _context.SaveChanges();
+        return result.Entity;
+    }
 }
