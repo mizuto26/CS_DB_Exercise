@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace CS_DB_Exercise.CS_DB_Sample.Infrastructures.Entities;
 
 [Table("sales_detail")]
 public class SalesDetailEntity
 {
-    [Key]
     [Column("id")]
     public int Id { get; set; }         // 売上明細Id（主キー）
 
@@ -22,4 +20,9 @@ public class SalesDetailEntity
     public int? ItemId { get; set; }    // 商品Id
 
     public ItemEntity? Item { get; set; } // 商品
+
+    public override string? ToString()
+    {
+        return $"売上明細Id:{Id},売上Id:{SalesId},数量:{Quantity},小計:{Subtotal}";
+    }
 }

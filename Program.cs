@@ -1,4 +1,5 @@
 using CS_DB_Exercise.Infrastructures.Contexts;
+using CS_DB_Exercise.Infrastructures.Entities;
 using CS_DB_Exercise.Infrastructures.Queries;
 
 namespace CS_DB_Exercise;
@@ -7,21 +8,23 @@ class Program
 {
     static void Main(string[] args)
     {
-        var accessor = new EmployeeAccessor(new AppDbContext());
+        var context = new AppDbContext();
+        var employeeAccessor = new EmployeeAccessor(context);
 
-        Console.WriteLine("部署Idを入力してください->");
-        int dept_id = int.Parse(Console.ReadLine()!);
+        Console.WriteLine("社員Idを入力してください->");
+        int employee_id = int.Parse(Console.ReadLine()!);
 
-        Console.WriteLine("演習-07 employeeテーブルから部署Idで該当社員を取得する");
+        Console.WriteLine("演習-11 指定された社員Idの社員を削除する");
 
-        var employee = accessor.FindByDeptId(dept_id);
-        if (employee == null)
+        var result = employeeAccessor.DeleteById(id: employee_id);
+
+        if (result == null)
         {
-            Console.WriteLine($"部署Id:{dept_id}の部署に所属する社員は存在しません");
+            Console.WriteLine($"社員Id:{employee_id}の社員は存在しないため削除できませんでした");
         }
         else
         {
-            Console.WriteLine($"{employee!.ToString()}");
+            Console.WriteLine($"社員Id:{employee_id}の社員を削除しました");
         }
     }
 }

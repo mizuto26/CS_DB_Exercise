@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CS_DB_Exercise.Infrastructures.Entities;
@@ -6,7 +5,6 @@ namespace CS_DB_Exercise.Infrastructures.Entities;
 [Table("employee")]
 public class EmployeeEntity
 {
-    [Key]
     [Column("id")]
     public int Id { get; set; }
 
@@ -15,6 +13,8 @@ public class EmployeeEntity
 
     [Column("dept_id")]
     public int DeptId { get; set; }
+
+    public DepartmentEntity? Department { get; set; }
 
     public override string ToString()
     {

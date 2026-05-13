@@ -72,4 +72,64 @@ public class ItemAccessor(AppDbContext context)
             .ToList();
         return items;
     }
+
+    public void Create(ItemEntity itemEntity)
+    {
+        _context.Items.Add(itemEntity);
+        _context.SaveChanges();
+    }
+
+    public void CreateRange(List<ItemEntity> list_itemEntity)
+    {
+        _context.Items.AddRange(list_itemEntity);
+        _context.SaveChanges();
+    }
+
+    public ItemEntity? UpdateById(ItemEntity itemEntity)
+    {
+        var result = _context.Items.Find(itemEntity.Id);
+        if (result == null)
+        {
+            return null; // 商品が見つからない場合はnullを返す
+        }
+        result!.Name = itemEntity.Name;
+        result.Price = itemEntity.Price;
+
+        _context.SaveChanges();
+        return result;
+    }
+
+    public void UpdateRange(List<ItemEntity> list_itemEntity)
+    {
+        _context.Items.UpdateRange(list_itemEntity);
+        _context.SaveChanges();
+    }
+
+    public ItemEntity? DeleteById(ItemEntity item)
+    {
+        var result = _context.Items.Find(item.Id);
+        if (result == null)
+        {
+            return null;// 商品が見つからない場合はnullを返す
+        }
+
+        var delResult = _context.Items.Remove(result);
+        _context.SaveChanges();
+        return delResult.Entity;
+    }
+
+    public void DeleteRange(List<ItemEntity> items)
+    {
+        _context.Items.RemoveRange(items);
+        _context.SaveChanges();
+    }
+
+    public ItemEntity FindByIdJoinItemCategory(int id)
+    {
+        var item = _context.Items
+            .Where(itemEntity => itemEntity.Id == id)
+            .Include(itemEntity => itemEntity.Category)// カテゴリを結合して取得するテゴリを結合して取得する
+            .Single();
+        return item;
+    }
 }
