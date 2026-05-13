@@ -23,4 +23,18 @@ public class SalesDetailAccessor(AppDbContext context)
         _context.SaveChanges();
         return result.Entity;
     }
+
+    public List<ItemSalesSummary> FindAllGroupByItemId()
+    {
+        var groupedDetails = _context.SalesDetails
+            .GroupBy(salesDetails => salesDetails.ItemId)
+            .Select(iGrouping => new ItemSalesSummary
+            {
+                ItemId = iGrouping.Key,
+                TotalQuantity = iGrouping.Sum(salesDetails => salesDetails.Quantity ?? 0),
+                TotalSubtotal = iGrouping.Sum(salesDetails => salesDetails.Subtotal ?? 0)
+            })
+            .ToList();
+        return groupedDetails;
+    }
 }

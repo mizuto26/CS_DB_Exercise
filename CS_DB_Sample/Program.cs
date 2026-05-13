@@ -5,16 +5,11 @@ class Program
     static void Main(string[] args)
     {
         using var context = new AppDbContext();
-        var registerSales = new RegiterSales(context);
+        var accessor = new ItemAccessor(context);
 
-        var sale = new SalesEntity { SalesDate = DateTime.UtcNow, Total = 240, AccountId = 1 };
-
-        var salesDetails = new List<SalesDetailEntity>
-        {
-            new SalesDetailEntity { Quantity = 1, Subtotal = 120, ItemId = 1 },
-            new SalesDetailEntity { Quantity = 1, Subtotal = 120, ItemId = 2 }
-        };
-
-        registerSales.Register(sale, salesDetails);
+        var average = accessor.GetAveragePriceByCategoryId(categoryId: 1);
+        Console.WriteLine($"平均単価: {average}");
+        var sum = accessor.GetTotalPriceByCategoryId(categoryId: 1);
+        Console.WriteLine($"合計単価: {sum}");
     }
 }

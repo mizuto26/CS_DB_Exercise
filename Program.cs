@@ -10,19 +10,20 @@ class Program
     static void Main(string[] args)
     {
         using var context = new AppDbContext();
-        var regiterDepartment = new RegiterDepartment(context);
-        var departmentAccessor = new DepartmentAccessor(context);
+        var accessor = new EmployeeAccessor(context);
 
-        Console.WriteLine("新しい部署名を入力してください->");
+        Console.WriteLine("社員名を入力してください->");
         string name = Console.ReadLine()!;
 
-        var departmentEntity = new DepartmentEntity { Name = name };
-        regiterDepartment.Register(departmentEntity);
+        var employee = accessor.FindByNameContainsJoinDepartment(name: name);
 
-        var departments = departmentAccessor.FindAll();
-        foreach (var department in departments)
+        if (employee == null)
         {
-            Console.WriteLine($"{department.ToString()}");
+            Console.WriteLine($"{name}さんは、存在しません。");
+        }
+        else
+        {
+            Console.WriteLine($"{employee!.Name}さんは、{employee.Department!.Name}に所属する社員です。");
         }
     }
 }

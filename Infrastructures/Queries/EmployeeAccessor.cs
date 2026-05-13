@@ -1,3 +1,4 @@
+using System.Linq;
 using CS_DB_Exercise.Infrastructures.Contexts;
 using CS_DB_Exercise.Infrastructures.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,15 @@ public class EmployeeAccessor(AppDbContext context)
     {
         var employee = _context.Employees
             .Where(employeeEntity => employeeEntity.Name == name)
+            .Include(employeeEntity => employeeEntity.Department)
+            .FirstOrDefault();
+        return employee;
+    }
+
+    public EmployeeEntity? FindByNameContainsJoinDepartment(string name)
+    {
+        var employee = _context.Employees
+            .Where(employeeEntity => employeeEntity.Name!.Contains(name))
             .Include(employeeEntity => employeeEntity.Department)
             .FirstOrDefault();
         return employee;

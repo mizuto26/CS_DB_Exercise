@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<ItemCategoryEntity> ItemCategories { get; set; } = null!;
     public DbSet<SalesDetailEntity> SalesDetails { get; set; } = null!;
     public DbSet<SalesEntity> Sales { get; set; } = null!;
+    public DbSet<ItemStockEntity> ItemStocks { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -50,7 +51,7 @@ public class AppDbContext : DbContext
             entity.HasKey(itemStockEntity => itemStockEntity.Id);
             entity.Property(itemStockEntity => itemStockEntity.Id).HasColumnName("id");
             entity.Property(itemStockEntity => itemStockEntity.ItemId).HasColumnName("item_id");
-            entity.Property(itemStockEntity => itemStockEntity.Quantity).HasColumnName("quantity");
+            entity.Property(itemStockEntity => itemStockEntity.Stock).HasColumnName("quantity");
         });
 
         modelBuilder.Entity<SalesDetailEntity>(entity =>
