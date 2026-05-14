@@ -1,23 +1,18 @@
-using CS_DB_Exercise.Domains.Adapters;
 using CS_DB_Exercise.Domains.Models;
 using CS_DB_Exercise.Domains.Repositories;
 using CS_DB_Exercise.Infrastructures.Contexts;
 using CS_DB_Exercise.Infrastructures.Entities;
 using Microsoft.EntityFrameworkCore;
+
 namespace CS_DB_Exercise.Infrastructures.Repositories;
 
-public class EmployeeRepository(
-    AppDbContext context, IEmployeeAdapter<EmployeeEntity> adapter) : IEmployeeRepository
+public class EmployeeRepository(AppDbContext context) : IEmployeeRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly IEmployeeAdapter<EmployeeEntity> _adapter = adapter;
 
     public void Create(Employee employee)
     {
-        // EmployeeからEmployeeEntityへ変換する
-        var entity = _adapter.FromDomain(employee);
-        // 社員を追加して永続化する
-        _context.Add(entity);
+        _context.Add(ToEntity(employee));
         _context.SaveChanges();
     }
 
@@ -40,27 +35,27 @@ public class EmployeeRepository(
 
     public List<Employee> FindAll()
     {
-        // すべての社員を取得する
-        var entities = _context.Employees
+        return _context.Employees
             .AsNoTracking()
+            .ToList()
+            .Select(ToDomain)
             .ToList();
-        // EmployeeEntityのリストをEmployeeのリストに変換して返す
-        var employees = _adapter.ToDomainList(entities);
-        return employees;
     }
 
     public Employee? FindById(int id)
     {
-        // 社員Idで社員を取得する
         var entity = _context.Employees.Find(id);
-        // 取得できない場合はnullを返す
-        if (entity == null)
-        {
-            return null;
-        }
-        // EmployeeEntityをEmployeeに変換して返す
-        var employee = _adapter.ToDomain(entity!);
-        return employee;
+        return entity is null ? null : ToDomain(entity);
+    }
+
+    public Employee? FindByNameContainsWithDepartment(string name)
+    {
+        var entity = _context.Employees
+            .Include(employeeEntity => employeeEntity.Department)
+            .AsNoTracking()
+            .FirstOrDefault(employeeEntity => employeeEntity.Name!.Contains(name));
+
+        return entity is null ? null : ToDomain(entity);
     }
 
     public bool UpdateById(Employee employee)
@@ -79,5 +74,25 @@ public class EmployeeRepository(
         _context.SaveChanges();
         // 変更が成功したらtrueを返す
         return true;
+    }
+
+    private static Employee ToDomain(EmployeeEntity source)
+    {
+        var department = source.Department is null
+            ? null
+            : new Department(source.Department.Id, source.Department.Name, null);
+
+        return new Employee(source.Id, source.Name, department);
+    }
+
+    private static EmployeeEntity ToEntity(Employee employee)
+    {
+        return new EmployeeEntity
+        {
+            Id = employee.Id,
+            Name = employee.Name,
+            DeptId = employee.Department?.Id
+                ?? throw new InvalidOperationException("社員の所属部署が設定されていません。")
+        };
     }
 }
