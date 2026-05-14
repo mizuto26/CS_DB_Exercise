@@ -1,20 +1,16 @@
-using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Adapters;
-using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Contexts;
-using CS_DB_Exercise.CS_DB_Sample.Infrastructures.Repositories;
-
 namespace CS_DB_Exercise.CS_DB_Sample;
 
 internal static class Program
 {
     private static void Main()
     {
-        using var context = new AppDbContext();
-        var adapter = new ItemEntityAdapter();
-        var itemRepository = new ItemRepository(adapter, context);
+        var provider = ServiceProviderBuilder.Build();
+        var repository = provider!.GetService<IItemRepository>();
 
-        var item = itemRepository.FindById(2);
-        Console.WriteLine(item);
-        var result = itemRepository.Exists("防水スプレー");
-        Console.WriteLine($"データの有無:{result}");
+        var items = repository!.FindAll();
+        foreach (var item in items)
+        {
+            Console.WriteLine($"商品Id:{item.Id}, 商品名:{item.Name}, 価格:{item.Price}");
+        }
     }
 }
