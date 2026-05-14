@@ -18,24 +18,39 @@ public sealed class ItemRepository(
         var itemEntities = _appDbContext.Items
             .AsNoTracking()
             .ToList();
-        return _adapter.ToDomainList(itemEntities);
+
+        var items = _adapter.ToDomainList(itemEntities);
+
+        return items;
     }
+
 
     public Item? FindById(int id)
     {
-        var entity = _appDbContext.Items
-            .Include(i => i.Category)
+        var itemEntity = _appDbContext.Items
+            .Include(item => item.Category)
             .AsNoTracking()
-            .SingleOrDefault(i => i.Id == id);
+            .SingleOrDefault(item => item.Id == id);
 
-        return entity is null ? null : _adapter.ToDomain(entity);
+        if (itemEntity == null)
+        {
+            return null;
+        }
+
+        var item = _adapter.ToDomain(itemEntity);
+
+        return item;
     }
+
 
     public bool Exists(string name)
     {
-        return _appDbContext.Items
-            .Any(i => i.Name == name);
+        var exists = _appDbContext.Items
+            .Any(item => item.Name == name);
+
+        return exists;
     }
+
 
     public void Create(Item item)
     {
@@ -44,33 +59,39 @@ public sealed class ItemRepository(
         _appDbContext.SaveChanges();
     }
 
+
     public bool UpdateById(Item item)
     {
         var entity = _appDbContext.Items
             .SingleOrDefault(i => i.Id == item.Id);
 
-        if (entity is null)
+        if (entity == null)
         {
             return false;
         }
 
         entity.Name = item.Name;
         entity.Price = item.Price;
-        _appDbContext.Items.Update(entity);
+
         _appDbContext.SaveChanges();
+
         return true;
     }
+
 
     public bool DeleteById(int id)
     {
         var entity = _appDbContext.Items
-            .SingleOrDefault(i => i.Id == id);
+            .SingleOrDefault(item => item.Id == id);
+
         if (entity == null)
         {
             return false;
         }
+
         _appDbContext.Items.Remove(entity);
         _appDbContext.SaveChanges();
+
         return true;
     }
 }

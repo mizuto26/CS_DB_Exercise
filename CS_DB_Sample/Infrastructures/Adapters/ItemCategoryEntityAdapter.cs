@@ -9,31 +9,42 @@ public sealed class ItemCategoryEntityAdapter : IItemCategoryAdapter<ItemCategor
     public ItemCategory ToDomain(ItemCategoryEntity source)
     {
         ArgumentNullException.ThrowIfNull(source);
-        var itemCategory = new ItemCategory(source.Id, source.Name!);
 
-        if (source.Items.Count > 0)
-        {
-            var items = source.Items
-                .Select(item => new Item(
-                    item.Id,
-                    item.Name!,
-                    item.Price,
-                    itemCategory))
-                .ToList();
+        var itemCategory = new ItemCategory(
+            source.Id,
+            source.Name ?? string.Empty
+        );
 
-            itemCategory.ChangeItems(items);
-        }
+        var items = source.Items
+            .Select(itemEntity =>
+                new Item(
+                    itemEntity.Id,
+                    itemEntity.Name ?? string.Empty,
+                    itemEntity.Price,
+                    itemCategory
+                )
+            )
+            .ToList();
+
+        itemCategory.ChangeItems(items);
 
         return itemCategory;
     }
 
-    public List<ItemCategory> ToDomainList(List<ItemCategoryEntity> sources)
+
+    public List<ItemCategory> ToDomainList(
+        List<ItemCategoryEntity> sources)
     {
         ArgumentNullException.ThrowIfNull(sources);
-        return sources.Select(ToDomain).ToList();
+
+        return sources
+            .Select(ToDomain)
+            .ToList();
     }
 
-    public ItemCategoryEntity FromDomain(ItemCategory itemCategory)
+
+    public ItemCategoryEntity FromDomain(
+        ItemCategory itemCategory)
     {
         ArgumentNullException.ThrowIfNull(itemCategory);
 
@@ -44,9 +55,14 @@ public sealed class ItemCategoryEntityAdapter : IItemCategoryAdapter<ItemCategor
         };
     }
 
-    public List<ItemCategoryEntity> FromDomainList(List<ItemCategory> itemCategories)
+
+    public List<ItemCategoryEntity> FromDomainList(
+        List<ItemCategory> itemCategories)
     {
         ArgumentNullException.ThrowIfNull(itemCategories);
-        return itemCategories.Select(FromDomain).ToList();
+
+        return itemCategories
+            .Select(FromDomain)
+            .ToList();
     }
 }
